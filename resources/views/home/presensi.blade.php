@@ -457,7 +457,7 @@
 
           <div class="form-group">
             <label for="exampleInputEmail1">NIK</label>
-            <input type="text" class="form-control" name="nik" value="{{ $crew->nik }}">
+            <input type="text" class="form-control" name="nik" value="{{ $crew->nik }}" required>
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Nama</label>
@@ -475,7 +475,7 @@
 
           <div class="form-group">
             <label for="exampleInputEmail1">Nomor Handphone</label>
-            <input type="text" class="form-control" name="hp" value="{{ $crew->hp }}">
+            <input type="text" class="form-control" name="hp" value="{{ $crew->hp }}" required>
           </div>
 
           <div class="form-group">

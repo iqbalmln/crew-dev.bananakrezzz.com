@@ -1,6 +1,5 @@
 @extends('staf.layout.main')
 @section('staf')
-<link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" rel="stylesheet">
 
 <div class="row">
 
@@ -53,7 +52,7 @@
 
                 <div class="card card-body">
                     <div class="table-responsive">
-                        <table class="table text-nowrap mb-0 align-middle" id="main-table">
+                        <table class="table text-nowrap mb-0 align-middle">
                             <thead class="text-dark fs-4">
                                 <tr>
                                     <th class="border-bottom-0">
@@ -246,15 +245,6 @@
                 }
             });
         });
-    });
-</script>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#main-table').DataTable();
     });
 </script>
 

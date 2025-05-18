@@ -28,6 +28,7 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::get('/presensi', [PresensiController::class, 'index'])->middleware('auth');
 Route::get('/card', [CardController::class, 'index'])->middleware('auth');
 
+Route::get('/cari_cardm', [PresensiController::class, 'cari_cardm']);
 
 
 Route::get('/laporan', function () {

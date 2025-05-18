@@ -456,6 +456,7 @@ class PresensiController extends Controller
             session()->flash('min_presensi', $min_presensi);
             session()->flash('rewards', reward::where('card_id', $card->id)->get());
             session()->flash('stores', store::get());
+            session()->flash('presensis_klaim', presensi::where('card_id', $card->id)->where('status', 2)->where('reward', 0)->latest()->get());
 
             session()->flash('presensi_reward', presensi::where('card_id', $card->id)->where('status', 2)->where('reward', 0)->count());
 
@@ -505,6 +506,27 @@ class PresensiController extends Controller
     }
 
 
+public function cari_cardm(Request $request)
+{
+    $ktp = $request->ktp;
+
+    // Cari data crew yang nomornya mengandung KTP yang diinputkan
+   $data = Card::where('nik', 'like', "%$ktp%")->get();
+\Log::info('Query executed: ' . Card::where('nik', 'like', "%$ktp%")->toSql());
+
+
+    if ($data->count() > 0) {
+        return response()->json([
+            'success' => true,
+            'data' => $data // Kirimkan array data crew
+        ]);
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => 'Data tidak ditemukan'
+        ]);
+    }
+}
 
 
 
