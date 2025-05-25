@@ -251,7 +251,9 @@
                         <th scope="col">Bus</th>
                         <th scope="col">Belanja</th>
                         <th scope="col">Ket</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -280,6 +282,7 @@
                         <td>{{ number_format($crew->belanja) }}</td>
 
                         <td>{{ $crew->ket }}</td>
+                        <td><a href="/image_presensi/{{ $crew->image }}" target="_blank">Lihat</a></td>
                         <td>
                           @if($crew->status=='')
                           <smal>Validasi Informasi</smal>
@@ -324,6 +327,8 @@
                                       </p>
                                       <label>Kode Presensi</label>
                                       <input type="number" name="kode_hari" class="form-control" placeholder="Masukan Kode Presensi" value="{{ $crew->kode_hari }}" required>
+                                      <button class="btn btn-primary my-2 btn-sync" type="button">Sync</button>
+                                      <br>
                                       @if($crew->kode_hari && $crew->created_at->format('Y-m-d') === now()->format('Y-m-d'))
                                       <div class="card card-body mt-1">
                                         Presensi hari ini yang mengunakan kode presensi {{ $crew->kode_hari }}
@@ -567,3 +572,20 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+  $(document).on('click','.btn-sync',function(){
+    let kode_hari = $(this).parent().find('[name="kode_hari"]').val()
+    if (kode_hari == "") {
+      alert("Kode presensi wajib di isi untuk mengambil data")
+    }
+    
+    fetch("http://127.0.0.1:8080/rombongan/"+kode_hari).then(res => {
+        if (res.status>=200 && res.status <300) {
+          return res.json()
+        }else{
+          throw new Error();
+        }
+    }).then(data=>console.log(data))
+    .catch(err=>console.log('fetch() failed'))
+  })
+</script>

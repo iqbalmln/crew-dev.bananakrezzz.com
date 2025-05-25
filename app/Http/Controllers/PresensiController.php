@@ -52,8 +52,22 @@ class PresensiController extends Controller
         $timestamp = time();
         $waktu = date('H:i', $timestamp);
 
-        $today = Carbon::now();
-        $tgl = $today->format('d M Y');
+        $destinationPath = 'image_presensi';
+        $myimage = "";
+        $belanja = null;
+
+        if ($request->image != null) {
+            $myimage = $request->image->getClientOriginalName();
+            $request->image->move(public_path($destinationPath), $myimage);
+        }
+        if(isset($request->belanja)){
+            $today = Carbon::parse($request->tgl);
+            $tgl = $today->format('d M Y');
+            $belanja = $request->belanja;
+        }else{
+            $today = Carbon::now();
+            $tgl = $today->format('d M Y');
+        }
 
 
 
@@ -73,6 +87,8 @@ class PresensiController extends Controller
                     'waktu' => $waktu,
                     'tgl' => $tgl,
                     'status' => '',
+                    'image' => $myimage,
+                    'belanja' => $belanja
 
                 ]);
                 $min_presensi = Setting::value('min_presensi');
@@ -138,6 +154,8 @@ class PresensiController extends Controller
                         'waktu' => $waktu,
                         'tgl' => $tgl,
                         'status' => '',
+                        'image' => $myimage,
+                        'belanja' => $belanja
                     ]);
                     $min_presensi = Setting::value('min_presensi');
                     $cards = card::where('nomor', $request->nomor)->join('card_levels', 'cards.level', '=', 'card_levels.id')
