@@ -119,30 +119,30 @@ class PresensiController extends Controller
                 $card_id = card::where('nomor', $request->nomor)->first();
                 $now = presensi::where('card_id', $card_id->id)->whereDate('created_at', $today)->first();
 
-                if ($now) {
-                    $min_presensi = Setting::value('min_presensi');
+                // if ($now) {
+                //     $min_presensi = Setting::value('min_presensi');
 
-                    $cards = card::where('nomor', $request->nomor)->join('card_levels', 'cards.level', '=', 'card_levels.id')
-                        ->select('card_levels.*', 'card_levels.nama')
-                        ->get();
+                //     $cards = card::where('nomor', $request->nomor)->join('card_levels', 'cards.level', '=', 'card_levels.id')
+                //         ->select('card_levels.*', 'card_levels.nama')
+                //         ->get();
 
-                    session()->flash('level', $cards);
-                    session()->flash('pres', true);
-                    session()->flash('nomor', 1);
-                    session()->flash('presensis', presensi::where('card_id', $card_id->id)->latest()->get());
-                    session()->flash('jumlah', presensi::where('card_id', $card_id->id)->count());
-                    session()->flash('total_card', presensi::where('card_id', $card_id->id)->where('status', 2)->count());
-                    session()->flash('total_crew', presensi::where('card_id', $card_id->id)->where('status', 1)->count());
-                    session()->flash('presensi_reward', presensi::where('card_id', $card_id->id)->where('status', 2)->where('reward', 0)->count());
-                    session()->flash('crews', card::where('nomor', $request->nomor)->get());
-                    session()->flash('min_presensi', $min_presensi);
-                    session()->flash('presensis_klaim', presensi::where('card_id', $card_id->id)->where('status', 2)->where('reward', 0)->latest()->get());
-                    session()->flash('rewards', reward::where('card_id', $card_id->id)->get());
-                    session()->flash('marketing', User::where('id', $card_id->user_id)->get('nama'));
-                    session()->flash('marketings', User::where('level', 'marketing')->get());
-                    session()->flash('stores', store::get());
-                    return back()->with('sudah_presensi', 'gagal');
-                } else {
+                //     session()->flash('level', $cards);
+                //     session()->flash('pres', true);
+                //     session()->flash('nomor', 1);
+                //     session()->flash('presensis', presensi::where('card_id', $card_id->id)->latest()->get());
+                //     session()->flash('jumlah', presensi::where('card_id', $card_id->id)->count());
+                //     session()->flash('total_card', presensi::where('card_id', $card_id->id)->where('status', 2)->count());
+                //     session()->flash('total_crew', presensi::where('card_id', $card_id->id)->where('status', 1)->count());
+                //     session()->flash('presensi_reward', presensi::where('card_id', $card_id->id)->where('status', 2)->where('reward', 0)->count());
+                //     session()->flash('crews', card::where('nomor', $request->nomor)->get());
+                //     session()->flash('min_presensi', $min_presensi);
+                //     session()->flash('presensis_klaim', presensi::where('card_id', $card_id->id)->where('status', 2)->where('reward', 0)->latest()->get());
+                //     session()->flash('rewards', reward::where('card_id', $card_id->id)->get());
+                //     session()->flash('marketing', User::where('id', $card_id->user_id)->get('nama'));
+                //     session()->flash('marketings', User::where('level', 'marketing')->get());
+                //     session()->flash('stores', store::get());
+                //     return back()->with('sudah_presensi', 'gagal');
+                // } else {
 
                     $card_id = Card::where('nomor', $request->nomor)->first();
                     $store = store::where('id', Auth::user()->store_id)->value('id');
@@ -180,7 +180,7 @@ class PresensiController extends Controller
                     session()->flash('marketings', User::where('level', 'marketing')->get());
 
                     return back()->with('berhasil_presensi', 'oke');
-                }
+                // }
             }
         } elseif ($cardCount > 1) {
             // Jika lebih dari satu data ditemukan, tampilkan pesan "data lebih dari satu"
@@ -405,7 +405,6 @@ class PresensiController extends Controller
         $total_presensi =  presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->count();
         $lokasi = store::where('id', Auth::user()->store_id)->value('nama');
         $store = store::where('id', Auth::user()->store_id)->value('id');
-
         reward::create([
             'card_id' => $request->card_id,
             'store_id' => $store,
@@ -521,6 +520,18 @@ class PresensiController extends Controller
             );
 
         return back()->with('berhasil_update_crew', 'oke');
+    }
+
+    public function approve_presence($id)
+    {
+        presensi::where('id', $id)
+            ->update(
+                [
+                    'status_approve' => '1',
+                ]
+            );
+
+        return back()->with('berhasil_update_status', 'oke');
     }
 
 

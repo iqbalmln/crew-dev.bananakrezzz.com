@@ -31,6 +31,14 @@
                     </button>
                 </div>
                 @endif
+                @if(session()->has('berhasil_update_status'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <strong>Berhasil Update!</strong> Approve Absensi
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
 
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title fw-semibold mb-4">Data Presensi Crew {{ $store }}</h5>
@@ -57,7 +65,7 @@
 
 
                 <div class="table-responsive">
-                    <table class="table text-nowrap mb-0 align-middle">
+                    <table class="table text-nowrap mb-0 align-middle table-home">
                         <thead class="text-dark fs-4">
                             <tr>
                                 <th class="border-bottom-0">
@@ -96,6 +104,12 @@
                                 </th>
                                 <th class="border-bottom-0">
                                     <h6 class="fw-semibold mb-0">Kode</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Status Approve</h6>
+                                </th>
+                                <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Aksi</h6>
                                 </th>
 
                             </tr>
@@ -202,9 +216,20 @@
                                 </td>
                                 <td class="border-bottom-0">
                                     <p class="mb-0 fw-normal">
+                                        {{ $user->status_approve == 0 ? 'Not Approve' : 'Approved' }}
+                                    </p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">
                                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#up.info{{$user->id}}">
                                             Update
                                         </button>
+                                        <?php if ($user->status_approve == 0): ?>
+                                            <br>
+                                            <a href="/approve_presence/{{ $user->id }}" class="btn btn-sm btn-success mt-1"onclick="return confirm('Yakin approve absensi?')">
+                                                Approve
+                                            </a>
+                                        <?php endif ?>
                                     </p>
                                     <!-- Modal -->
                                     <div class="modal fade" id="up.info{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

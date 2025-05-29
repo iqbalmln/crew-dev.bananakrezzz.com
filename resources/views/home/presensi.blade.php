@@ -253,6 +253,7 @@
                         <th scope="col">Ket</th>
                         <th scope="col">Image</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Status Approve</th>
                         <th scope="col">Aksi</th>
                       </tr>
                     </thead>
@@ -300,6 +301,7 @@
                           @endif
 
                         </td>
+                        <td>{{ $crew->status_approve == 0 ? 'Not Approve' : 'Approved' }}</td>
                         <td>
 
 
@@ -585,7 +587,11 @@
         }else{
           throw new Error();
         }
-    }).then(data=>console.log(data))
+    }).then(data => {
+      $(this).parent().find('[name="belanja"]').val(data.total_belanja.replace(/\./g, ''))
+      $(this).parent().find('[name="biro"]').val(data.nama.split('_')[2])
+      $(this).parent().find('[name="bus"]').val(data.nama.split('_')[0])
+    })
     .catch(err=>console.log('fetch() failed'))
   })
 </script>

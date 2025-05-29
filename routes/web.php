@@ -54,6 +54,7 @@ Route::get('/logout', [Controller::class, 'logout'])->middleware('auth');
 //presensi
 Route::post('/add_presensi', [PresensiController::class, 'add_presensi'])->middleware('auth');
 Route::post('/add_belanja', [PresensiController::class, 'add_belanja'])->middleware('auth');
+Route::get('/approve_presence/{id}', [PresensiController::class, 'approve_presence'])->middleware('auth');
 Route::get('/add_presensi_id', [PresensiController::class, 'add_presensi_id'])->middleware('auth');
 
 //regis kartu
