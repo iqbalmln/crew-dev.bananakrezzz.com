@@ -210,7 +210,7 @@
                     <h5 class="card-title ">Informasi Kehadiran </h5>
                   </center>
                   <div class="row ">
-                    <div class="col-sm-4">
+                    <div class="col-sm-12">
                       <div class="" style="border-radius:50px;">
                         <div class="card-body">
                           <center>
@@ -218,24 +218,6 @@
                             <a href="#" class="btn btn-warning">{{ session('jumlah') }}</a>
                           </center>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="" style="border-radius:50px;">
-                        <div class="card-body">
-                          <center>
-                            <small class="card-text">Presensi Card</small><br>
-                            <a href="#" class="btn btn-primary">{{ session('total_card') }}</a>
-                          </center>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="card-body">
-                        <center>
-                          <small class="card-text">Presensi Crew</small><br>
-                          <a href="#" class="btn btn-danger">{{ session('total_crew') }}</a>
-                        </center>
                       </div>
                     </div>
                   </div>
@@ -251,8 +233,6 @@
                         <th scope="col">Bus</th>
                         <th scope="col">Belanja</th>
                         <th scope="col">Ket</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Status Approve</th>
                         <th scope="col">Aksi</th>
                       </tr>
@@ -283,24 +263,6 @@
                         <td>{{ number_format($crew->belanja) }}</td>
 
                         <td>{{ $crew->ket }}</td>
-                        <td><a href="/image_presensi/{{ $crew->image }}" target="_blank">Lihat</a></td>
-                        <td>
-                          @if($crew->status=='')
-                          <smal>Validasi Informasi</smal>
-                          @endif
-                          @if($crew->status==1)
-                          <small class="text-danger">Presensi Crew</small>
-                          @endif
-                          @if($crew->status==2)
-                          <small class="text-primary"> Presensi Card
-                            @if($crew->reward==true)
-                            <span class="badge badge-success">Klaim</span>
-
-                            @endif
-                          </small>
-                          @endif
-
-                        </td>
                         <td>{{ $crew->status_approve == 0 ? 'Not Approve' : 'Approved' }}</td>
                         <td>
 

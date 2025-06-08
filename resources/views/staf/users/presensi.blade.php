@@ -106,6 +106,9 @@
                                     <h6 class="fw-semibold mb-0">Kode</h6>
                                 </th>
                                 <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Gambar</h6>
+                                </th>
+                                <th class="border-bottom-0">
                                     <h6 class="fw-semibold mb-0">Status Approve</h6>
                                 </th>
                                 <th class="border-bottom-0">
@@ -213,6 +216,13 @@
                                     <p class="mb-0 fw-normal">
                                         {{$user->kode_hari}}
                                     </p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    @if($user->image == null)
+                                        <p class="mb-0 fw-normal">Tidak ada</p>
+                                    @else
+                                        <a href="/image_presensi/{{ $user->image }}" target="_blank">Lihat</a>
+                                    @endif
                                 </td>
                                 <td class="border-bottom-0">
                                     <p class="mb-0 fw-normal">
