@@ -210,14 +210,32 @@
                     <h5 class="card-title ">Informasi Kehadiran </h5>
                   </center>
                   <div class="row ">
-                    <div class="col-sm-12">
+                    <div class="col-sm-4">
                       <div class="" style="border-radius:50px;">
-                        <div class="card-body">
+                        <div class="card-body px-0">
                           <center>
                             <small class="card-text">Total Keseluruhan</small><br>
                             <a href="#" class="btn btn-warning">{{ session('jumlah') }}</a>
                           </center>
                         </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="" style="border-radius:50px;">
+                        <div class="card-body px-0">
+                          <center>
+                            <small class="card-text">Reward Sudah Klaim</small><br>
+                            <a href="#" class="btn btn-primary">{{ session('sudah_klaim') }}</a>
+                          </center>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card-body px-0">
+                        <center>
+                          <small class="card-text">Reward Belum Klaim</small><br>
+                          <a href="#" class="btn btn-danger">{{ session('belum_klaim') }}</a>
+                        </center>
                       </div>
                     </div>
                   </div>

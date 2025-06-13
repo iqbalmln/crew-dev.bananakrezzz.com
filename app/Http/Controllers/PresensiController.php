@@ -102,6 +102,8 @@ class PresensiController extends Controller
 
                 session()->flash('presensis', presensi::where('card_id', $card_id->id)->latest()->get());
                 session()->flash('jumlah', presensi::where('card_id', $card_id->id)->count());
+                session()->flash('sudah_klaim', presensi::where('card_id', $card_id->id)->where('reward',1)->count());
+                session()->flash('belum_klaim', presensi::where('card_id', $card_id->id)->where('reward',0)->where('status',2)->count());
                 session()->flash('total_card', presensi::where('card_id', $card_id->id)->where('status', 2)->count());
                 session()->flash('total_crew', presensi::where('card_id', $card_id->id)->where('status', 1)->count());
                 session()->flash('crews', card::where('nomor', $request->nomor)->get());
@@ -168,6 +170,8 @@ class PresensiController extends Controller
 
                     session()->flash('presensis', presensi::where('card_id', $card_id->id)->latest()->get());
                     session()->flash('jumlah', presensi::where('card_id', $card_id->id)->count());
+                    session()->flash('sudah_klaim', presensi::where('card_id', $card_id->id)->where('reward',1)->count());
+                    session()->flash('belum_klaim', presensi::where('card_id', $card_id->id)->where('reward',0)->where('status',2)->count());
                     session()->flash('total_card', presensi::where('card_id', $card_id->id)->where('status', 2)->count());
                     session()->flash('total_crew', presensi::where('card_id', $card_id->id)->where('status', 1)->count());
                     session()->flash('crews', card::where('nomor', $request->nomor)->get());
@@ -199,6 +203,8 @@ class PresensiController extends Controller
             session()->flash('presensi_reward', presensi::where('card_id', $card_id->id)->where('status', 2)->where('reward', 0)->count());
             session()->flash('rewards', reward::where('card_id', $card_id->id)->get());
             session()->flash('jumlah', presensi::all());
+            session()->flash('sudah_klaim', presensi::where('card_id', $card_id->id)->where('reward',1)->count());
+            session()->flash('belum_klaim', presensi::where('card_id', $card_id->id)->where('reward',0)->where('status',2)->count());
 
             session()->flash('min_presensi', $min_presensi);
             session()->flash('stores', store::get());
@@ -467,6 +473,8 @@ class PresensiController extends Controller
             session()->flash('nomor', 1);
             session()->flash('presensis', Presensi::where('card_id', $card->id)->latest()->get());
             session()->flash('jumlah', Presensi::where('card_id', $card->id)->count());
+            session()->flash('sudah_klaim', presensi::where('card_id', $card->id)->where('reward',1)->count());
+            session()->flash('belum_klaim', presensi::where('card_id', $card->id)->where('reward',0)->where('status',2)->count());
             session()->flash('total_card', Presensi::where('card_id', $card->id)->where('status', 2)->count());
             session()->flash('total_crew', Presensi::where('card_id', $card->id)->where('status', 1)->count());
             session()->flash('crews', Card::where('id', $card->id)->get());

@@ -112,6 +112,9 @@
                                     <h6 class="fw-semibold mb-0">Status Approve</h6>
                                 </th>
                                 <th class="border-bottom-0">
+                                    <h6 class="fw-semibold mb-0">Status Reward</h6>
+                                </th>
+                                <th class="border-bottom-0">
                                     <h6 class="fw-semibold mb-0">Aksi</h6>
                                 </th>
 
@@ -227,6 +230,15 @@
                                 <td class="border-bottom-0">
                                     <p class="mb-0 fw-normal">
                                         {{ $user->status_approve == 0 ? 'Not Approve' : 'Approved' }}
+                                    </p>
+                                </td>
+                                <td class="border-bottom-0">
+                                    <p class="mb-0 fw-normal">
+                                        @if($user->reward == 0)
+                                            <span class="badge bg-warning">Belum Klaim</span>
+                                        @else
+                                            <span class="badge bg-success">Sudah Klaim</span>
+                                        @endif
                                     </p>
                                 </td>
                                 <td class="border-bottom-0">
