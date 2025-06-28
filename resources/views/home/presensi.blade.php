@@ -561,6 +561,7 @@
       alert("Kode presensi wajib di isi untuk mengambil data")
     }
     
+    {{-- fetch("https://crew.bananakrezzz.com/rombongan/"+kode_hari).then(res => { --}}
     fetch("http://127.0.0.1:8080/rombongan/"+kode_hari).then(res => {
         if (res.status>=200 && res.status <300) {
           return res.json()
@@ -568,9 +569,12 @@
           throw new Error();
         }
     }).then(data => {
+      let data_split = data.nama.split("_")
+      let data_split2 = data.nama.split("")
+
       $(this).parent().find('[name="belanja"]').val(data.total_belanja.replace(/\./g, ''))
-      $(this).parent().find('[name="biro"]').val(data.nama.split('_')[2])
-      $(this).parent().find('[name="bus"]').val(data.nama.split('_')[0])
+      $(this).parent().find('[name="biro"]').val(data_split[2] != "" ? data_split[2] : "-")
+      $(this).parent().find('[name="bus"]').val(data_split2[1] == 'B' ? data_split2[0] : '-')
     })
     .catch(err=>console.log('fetch() failed'))
   })

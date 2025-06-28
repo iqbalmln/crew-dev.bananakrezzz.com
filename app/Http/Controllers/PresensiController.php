@@ -389,6 +389,16 @@ class PresensiController extends Controller
         return back()->with('berhasil_update_crew', 'oke');
     }
 
+    public function formatNomor($phone) {
+        $phone = preg_replace('/[^0-9]/', '', $phone); // hapus karakter selain angka
+        if (substr($phone, 0, 2) === '62') {
+            return $phone;
+        } elseif (substr($phone, 0, 1) === '0') {
+            return '62' . substr($phone, 1);
+        } else {
+            return $phone; // jika tidak 0 atau 62 di awal, biarkan saja
+        }
+    }
 
     public function klaim_reward(Request $request)
     {
@@ -422,8 +432,36 @@ class PresensiController extends Controller
         
         presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->update(['reward' => true]);
     
-    
-       
+        $phone = card::where('id',$request->card_id)->first()->hp;
+        $phone = $this->formatNomor($phone);
+        $curl = curl_init();
+
+        $api_key_wa = "u2a53a9beb36e4f5.7dc9be52f701442cafbf96cc899838f8";
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://wa5901.oneapi.my.id/api/v1/messages',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'GET',
+          CURLOPT_POSTFIELDS =>'{
+            "recipient_type": "individual",
+            "to": '.$phone.',
+            "text": {
+                "body": "Reward berhasil di klaim"
+            }
+        }',
+          CURLOPT_HTTPHEADER => array(
+            "Authorization: Bearer $api_key_wa",
+            'Content-Type: application/json'
+          ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
 
         $cards = Card::where('cards.id', $request->card_id)
             ->join('card_levels', 'cards.level', '=', 'card_levels.id')
