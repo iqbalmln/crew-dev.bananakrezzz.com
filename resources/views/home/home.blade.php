@@ -234,6 +234,7 @@ $jq(document).ready(function() {
 
 <script>
 // Password yang benar
+{{-- const correctPassword = "11011"; --}}
 const correctPassword = "123";
 
 // Event listener untuk tombol submit password

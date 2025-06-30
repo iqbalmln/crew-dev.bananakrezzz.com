@@ -555,7 +555,33 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
+  function parseDataCrew(input) {
+          B: 0,
+          M: 0,
+          poBus: '',
+          biro: ''
+      };
+
+      // Ambil jumlah B dan M
+      const matchB = input.match(/(\d+)B/);
+      const matchM = input.match(/(\d+)M/);
+      if (matchB) result.B = parseInt(matchB[1]);
+      if (matchM) result.M = parseInt(matchM[1]);
+
+      // Ambil isi dalam tanda kurung
+      const matches = input.match(/\((.*?)\)/g);
+      if (matches && matches.length >= 2) {
+          result.poBus = matches[0].replace(/[()]/g, '').trim(); // pertama
+          result.biro = matches[matches.length - 1].replace(/[()]/g, '').trim(); // terakhir
+      }
+
+      return result;
+  }
+
   $(document).on('click','.btn-sync',function(){
+    {{-- const input1 = '1B (PO Bus) (Rombongan) (Biro)';
+    const input2 = '1B 2M (PO Bus) (Rombongan) (Biro)'; --}}
+
     let kode_hari = $(this).parent().find('[name="kode_hari"]').val()
     if (kode_hari == "") {
       alert("Kode presensi wajib di isi untuk mengambil data")
@@ -569,12 +595,12 @@
           throw new Error();
         }
     }).then(data => {
-      let data_split = data.nama.split("_")
-      let data_split2 = data.nama.split("")
+      let data_split = parseDataCrew(data.nama)
 
       $(this).parent().find('[name="belanja"]').val(data.total_belanja.replace(/\./g, ''))
-      $(this).parent().find('[name="biro"]').val(data_split[2] != "" ? data_split[2] : "-")
-      $(this).parent().find('[name="bus"]').val(data_split2[1] == 'B' ? data_split2[0] : '-')
+      $(this).parent().find('[name="biro"]').val(data_split.biro)
+      $(this).parent().find('[name="bus"]').val(data_split.B)
+      $(this).parent().find('[name="po"]').val(data_split.poBus)
     })
     .catch(err=>console.log('fetch() failed'))
   })
