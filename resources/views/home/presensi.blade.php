@@ -331,7 +331,7 @@
 
                                               @foreach($presensi_hari as $hariItem)
                                               @if($hariItem->kode_hari === $crew->kode_hari)
-                                             
+
                                               <tr>
                                                 <td>{{ $hariItem->waktu }} - {{ $hariItem->tgl }}</td>
                                                 <td>{{ $hariItem->po }}</td>
@@ -357,7 +357,7 @@
                                       </div>
                                       @endif
 
-                                     
+
                                       <label>PO Bus</label>
                                       <input type="text" name="po" class="form-control" placeholder="Masukan PO Bus" value="{{ $crew->po }}" readonly>
                                       <label>Biro Bus</label>
@@ -475,7 +475,7 @@
             <select class="form-select" aria-label="Default select example" name="user_id">
               @php
               $marketing = session('marketing') ?? [];
-              
+
               @endphp
               @foreach($marketing as $mark)
               <option selected value="{{ $mark->id }}">
@@ -487,7 +487,7 @@
                 $marketings = session('marketings') ?? [];
                 @endphp
                 @foreach($marketings as $mark)
-                
+
               <option value="{{ $mark->id }}">{{ $mark->nama }}</option>
               @endforeach
             </select>
@@ -555,29 +555,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
-  function parseDataCrew(input) {
-      const result = {
-          B: 0,
-          M: 0,
-          poBus: '',
-          biro: ''
-      };
+    function parseDataCrew(input) {
+        let result = {
+            B: 0,
+            M: 0,
+            poBus: '',
+            biro: ''
+        };
 
-      // Ambil jumlah B dan M
-      const matchB = input.match(/(\d+)B/);
-      const matchM = input.match(/(\d+)M/);
-      if (matchB) result.B = parseInt(matchB[1]);
-      if (matchM) result.M = parseInt(matchM[1]);
+        const matchB = input.match(/(\d+)B/);
+        const matchM = input.match(/(\d+)M/);
+        if (matchB) result.B = parseInt(matchB[1]);
+        if (matchM) result.M = parseInt(matchM[1]);
 
-      // Ambil isi dalam tanda kurung
-      const matches = input.match(/\((.*?)\)/g);
-      if (matches && matches.length >= 2) {
-          result.poBus = matches[0].replace(/[()]/g, '').trim(); // pertama
-          result.biro = matches[matches.length - 1].replace(/[()]/g, '').trim(); // terakhir
-      }
+        const matches = input.match(/\((.*?)\)/g);
+        if (matches && matches.length >= 2) {
+            result.poBus = matches[0].replace(/[()]/g, '').trim(); // pertama
+            result.biro = matches[matches.length - 1].replace(/[()]/g, '').trim(); // terakhir
+        }
 
-      return result;
-  }
+        return result;
+    }
+
 
   $(document).on('click','.btn-sync',function(){
     {{-- const input1 = '1B (PO Bus) (Rombongan) (Biro)';
@@ -587,7 +586,7 @@
     if (kode_hari == "") {
       alert("Kode presensi wajib di isi untuk mengambil data")
     }
-    
+
     {{-- fetch("https://crew.bananakrezzz.com/rombongan/"+kode_hari).then(res => { --}}
     fetch("http://127.0.0.1:8080/rombongan/"+kode_hari).then(res => {
         if (res.status>=200 && res.status <300) {
