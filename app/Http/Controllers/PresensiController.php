@@ -148,17 +148,32 @@ class PresensiController extends Controller
 
                     $card_id = Card::where('nomor', $request->nomor)->first();
                     $store = store::where('id', Auth::user()->store_id)->value('id');
-                    presensi::create([
-                        'card_id' =>  $card_id->id,
-                        'store_id' =>  $store,
-                        'nomor' =>  $request->nomor,
-                        'nomor' =>  $request->nomor,
-                        'waktu' => $waktu,
-                        'tgl' => $tgl,
-                        'status' => '',
-                        'image' => $myimage,
-                        'belanja' => $belanja
-                    ]);
+                    if ($request->tgl == null) {
+                        presensi::create([
+                            'card_id' =>  $card_id->id,
+                            'store_id' =>  $store,
+                            'nomor' =>  $request->nomor,
+                            'nomor' =>  $request->nomor,
+                            'waktu' => $waktu,
+                            'tgl' => $tgl,
+                            'status' => '2',
+                            'status_approve' => '1',
+                            'image' => $myimage,
+                            'belanja' => $belanja
+                        ]);
+                    }else{
+                        presensi::create([
+                            'card_id' =>  $card_id->id,
+                            'store_id' =>  $store,
+                            'nomor' =>  $request->nomor,
+                            'nomor' =>  $request->nomor,
+                            'waktu' => $waktu,
+                            'tgl' => $tgl,
+                            'status' => '',
+                            'image' => $myimage,
+                            'belanja' => $belanja
+                        ]);
+                    }
                     $min_presensi = Setting::value('min_presensi');
                     $cards = card::where('nomor', $request->nomor)->join('card_levels', 'cards.level', '=', 'card_levels.id')
                         ->select('cards.nomor', 'card_levels.nama')
@@ -329,7 +344,7 @@ class PresensiController extends Controller
             $status = 1;
         }
         if ($db < $belanja) {
-            $status = 2;
+            $status = 2; 
         }
 
 
@@ -370,6 +385,26 @@ class PresensiController extends Controller
             ->join('card_levels', 'cards.level', '=', 'card_levels.id')
             ->select('card_levels.*', 'card_levels.nama')
             ->get();
+
+        $phone = card::where('id',$request->card_id)->first()->hp;
+        $phone = $this->formatNomor($phone);
+        
+        $api_key_wa = "u2a53a9beb36e4f5.7dc9be52f701442cafbf96cc899838f8"; 
+        $url_wa = 'https://wa5901.oneapi.my.id/api/v1/messages';
+
+        $client = new MessageBuilder([
+            'api_url' => $url_wa,
+            'api_key' => $api_key_wa,
+        ]);
+
+        $belanja_rp = $this->rupiah($belanja);
+        $text = $client->to($phone)
+            ->content("Submit Validasi informasi : &#13;Jumlah total transaksi = $belanja_rp &#13;Waktu =".date("Y-m-d")."
+            ")
+            ->save();
+
+        $messages = [$text];
+        [$delivery, $errors] = $client->send($messages);
 
 
         session()->flash('level', $cards);
@@ -569,27 +604,32 @@ class PresensiController extends Controller
     }
 
 
-public function cari_cardm(Request $request)
-{
-    $ktp = $request->ktp;
+    public function cari_cardm(Request $request)
+    {
+        $ktp = $request->ktp;
 
-    // Cari data crew yang nomornya mengandung KTP yang diinputkan
-   $data = Card::where('nik', 'like', "%$ktp%")->get();
-\Log::info('Query executed: ' . Card::where('nik', 'like', "%$ktp%")->toSql());
+        // Cari data crew yang nomornya mengandung KTP yang diinputkan
+       $data = Card::where('nik', 'like', "%$ktp%")->get();
+    \Log::info('Query executed: ' . Card::where('nik', 'like', "%$ktp%")->toSql());
 
 
-    if ($data->count() > 0) {
-        return response()->json([
-            'success' => true,
-            'data' => $data // Kirimkan array data crew
-        ]);
-    } else {
-        return response()->json([
-            'success' => false,
-            'message' => 'Data tidak ditemukan'
-        ]);
+        if ($data->count() > 0) {
+            return response()->json([
+                'success' => true,
+                'data' => $data // Kirimkan array data crew
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan'
+            ]);
+        }
     }
-}
+
+    function rupiah($angka){
+        $hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
+        return $hasil_rupiah;
+    }
 
 
 

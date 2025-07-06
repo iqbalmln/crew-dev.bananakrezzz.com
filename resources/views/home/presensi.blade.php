@@ -359,16 +359,16 @@
 
                                      
                                       <label>PO Bus</label>
-                                      <input type="text" name="po" class="form-control" placeholder="Masukan PO Bus" value="{{ $crew->po }}" required>
+                                      <input type="text" name="po" class="form-control" placeholder="Masukan PO Bus" value="{{ $crew->po }}" readonly>
                                       <label>Biro Bus</label>
-                                      <input type="text" name="biro" class="form-control" placeholder="Masukan Biro " value="{{ $crew->biro }}" required>
+                                      <input type="text" name="biro" class="form-control" placeholder="Masukan Biro " value="{{ $crew->biro }}" readonly>
                                       <label>Jumlah Bus</label>
-                                      <input type="text" name="bus" class="form-control" placeholder="Masukan Jumlah Bus" value="{{ $crew->bus }}" required>
+                                      <input type="text" name="bus" class="form-control" placeholder="Masukan Jumlah Bus" value="{{ $crew->bus }}" readonly>
                                       <label>Total Belanja</label>
-                                      <input type="number" name="belanja" class="form-control" placeholder="Masukan Total Belanja" value="{{ $crew->belanja }}">
+                                      <input type="number" name="belanja" class="form-control" placeholder="Masukan Total Belanja" value="{{ $crew->belanja }}" readonly>
                                       <small id="emailHelp" class="form-text text-muted">Hanya masukan angka dan tanpa titik/koma</small>
                                       <label>Keterangan</label>
-                                      <input type="text" name="ket" class="form-control" placeholder="Masukan Keterangan" value="{{ $crew->ket }}" required>
+                                      <input type="text" name="ket" class="form-control" placeholder="Masukan Keterangan" value="{{ $crew->ket }}">
                                       <input type="hidden" name="presensi_id" value="{{ $crew->id }}">
                                       <input type="hidden" name="card_id" value="{{ $crew->card_id }}">
 
@@ -556,6 +556,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
   function parseDataCrew(input) {
+      const result = {
           B: 0,
           M: 0,
           poBus: '',

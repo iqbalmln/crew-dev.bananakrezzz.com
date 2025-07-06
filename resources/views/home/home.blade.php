@@ -271,7 +271,7 @@ $('#pmanual').on('shown.bs.modal', function () {
 
 
                 <div class="custom-form mt-4 pt-2 mb-lg-0 mb-5">
-                  <form method="get" role="search" action="/add_presensi">
+                  <form method="post" role="search" action="/add_presensi">
                     @csrf
                     <!-- <div class="text-center text-home mb-3">
                   <div class="form-check ">
