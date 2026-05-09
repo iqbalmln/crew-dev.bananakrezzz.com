@@ -365,7 +365,9 @@
                                       <label>Jumlah Bus</label>
                                       <input type="text" name="bus" class="form-control" placeholder="Masukan Jumlah Bus" value="{{ $crew->bus }}" readonly>
                                       <label>Total Belanja</label>
-                                      <input type="number" name="belanja" class="form-control" placeholder="Masukan Total Belanja" value="{{ $crew->belanja }}" readonly>
+                                      <input type="text" name="belanja" class="form-control" placeholder="Masukan Total Belanja" value="{{ $crew->belanja }}" readonly>
+                                      <label>Nama Rombongan</label>
+                                      <input type="text" name="rombongan" class="form-control" placeholder="Nama Rombongan" value="{{ $crew->rombongan }}" readonly>
                                       <small id="emailHelp" class="form-text text-muted">Hanya masukan angka dan tanpa titik/koma</small>
                                       <label>Keterangan</label>
                                       <input type="text" name="ket" class="form-control" placeholder="Masukan Keterangan" value="{{ $crew->ket }}">
@@ -587,8 +589,8 @@
       alert("Kode presensi wajib di isi untuk mengambil data")
     }
 
-    {{-- fetch("https://crew.bananakrezzz.com/rombongan/"+kode_hari).then(res => { --}}
-    fetch("http://127.0.0.1:8080/rombongan/"+kode_hari).then(res => {
+    fetch("https://cal-dev.bananakrezzz.com/rombongan/"+kode_hari).then(res => {
+    // fetch("http://127.0.0.1:8080/rombongan/"+kode_hari).then(res => {
         if (res.status>=200 && res.status <300) {
           return res.json()
         }else{
@@ -597,10 +599,11 @@
     }).then(data => {
       let data_split = parseDataCrew(data.nama)
 
-      $(this).parent().find('[name="belanja"]').val(data.total_belanja.replace(/\./g, ''))
+      $(this).parent().find('[name="belanja"]').val(data.total_belanja)
       $(this).parent().find('[name="biro"]').val(data_split.biro)
       $(this).parent().find('[name="bus"]').val(data_split.B)
       $(this).parent().find('[name="po"]').val(data_split.poBus)
+      $(this).parent().find('[name="rombongan"]').val(data.nama)
     })
     .catch(err=>console.log('fetch() failed'))
   })

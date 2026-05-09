@@ -115,6 +115,28 @@ class PresensiController extends Controller
                 session()->flash('marketing', User::where('id', $card_id->user_id)->get('nama'));
                 session()->flash('marketings', User::where('level', 'marketing')->get());
 
+                // Kirim notifikasi WhatsApp
+                $phone = card::where('id', $card_id->id)->first()->hp;
+                if ($phone) {
+                    $phone = $this->formatNomor($phone);
+                    $storeName = store::where('id', Auth::user()->store_id)->value('nama');
+
+                    $api_key_wa = "u2a53a9beb36e4f5.7dc9be52f701442cafbf96cc899838f8";
+                    $url_wa = 'https://wa5901.oneapi.my.id/api/v1/messages';
+
+                    $client = new MessageBuilder([
+                        'api_url' => $url_wa,
+                        'api_key' => $api_key_wa,
+                    ]);
+
+                    $text = $client->to($phone)
+                        ->content("Presensi panjenengan sampun kasil! &#13;&#13;Wonten ing $storeName &#13;Tanggal : $tgl &#13;Wekdal : $waktu &#13;&#13;Matur Suwun sampun pinarak Kampoeng Banana Krezzz🙏🏻☺️")
+                        ->save();
+
+                    $messages = [$text];
+                    $client->send($messages);
+                }
+
                 return back()->with('berhasil_presensi', 'oke');
             } else {
 
@@ -197,6 +219,28 @@ class PresensiController extends Controller
 
                     session()->flash('marketing', User::where('id', $card_id->user_id)->get('nama'));
                     session()->flash('marketings', User::where('level', 'marketing')->get());
+
+                    // Kirim notifikasi WhatsApp
+                    $phone = card::where('id', $card_id->id)->first()->hp;
+                    if ($phone) {
+                        $phone = $this->formatNomor($phone);
+                        $storeName = store::where('id', Auth::user()->store_id)->value('nama');
+
+                        $api_key_wa = "u2a53a9beb36e4f5.7dc9be52f701442cafbf96cc899838f8";
+                        $url_wa = 'https://wa5901.oneapi.my.id/api/v1/messages';
+
+                        $client = new MessageBuilder([
+                            'api_url' => $url_wa,
+                            'api_key' => $api_key_wa,
+                        ]);
+
+                        $text = $client->to($phone)
+                            ->content("Presensi panjenengan sampun kasil! &#13;&#13;Wonten ing $storeName &#13;Tanggal : $tgl &#13;Wekdal : $waktu &#13;&#13;Matur Suwun sampun pinarak Kampoeng Banana Krezzz🙏🏻☺️")
+                            ->save();
+
+                        $messages = [$text];
+                        $client->send($messages);
+                    }
 
                     return back()->with('berhasil_presensi', 'oke');
                 // }
@@ -362,6 +406,7 @@ class PresensiController extends Controller
                         'bus' =>  $request->bus,
                         'ket' =>  $request->ket,
                         'status' =>  $status,
+                        'rombongan' =>  $request->rombongan,
                     ]
                 );
         } else {
@@ -376,6 +421,7 @@ class PresensiController extends Controller
                         'bus' =>  $request->bus,
                         'ket' =>  $request->ket,
                         'status' =>  $status,
+                        'rombongan' =>  $request->rombongan,
                     ]
                 );
         }
@@ -398,9 +444,11 @@ class PresensiController extends Controller
         ]);
 
         $belanja_rp = $this->rupiah($belanja);
+        $rombongan = $request->rombongan;
         $text = $client->to($phone)
-            ->content("Submit Validasi informasi : &#13;Jumlah total transaksi = $belanja_rp &#13;Waktu =".date("Y-m-d")."
-            ")
+            ->content("
+                Sugeng Rawuh Dhateng  Kampoeng Banana Krezzz Cabang (x) &#13;&#13;• Rombongan : $rombongan &#13;• Tabuh : ".date("Y-m-d")."&#13;• Total Belanja : $belanja_rp &#13;&#13;Matur Suwun sampun pinarak Kampoeng Banana Krezzz🙏🏻☺️
+                ")
             ->save();
 
         $messages = [$text];
@@ -465,7 +513,9 @@ class PresensiController extends Controller
 
         ]);
         
-        presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->update(['reward' => true]);
+        $belanja_rp = presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->sum('belanja');
+        $belanja_rp = $this->rupiah($belanja_rp);
+        // presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->update(['reward' => true]);
     
         $phone = card::where('id',$request->card_id)->first()->hp;
         $phone = $this->formatNomor($phone);
@@ -479,7 +529,7 @@ class PresensiController extends Controller
         ]);
 
         $text = $client->to($phone)
-            ->content("Anda telah klaim reward di website crew Banana Krezzz")
+            ->content("Klaim absensi panjenengan sampun sukses! &#13;Wonten ing Kampoeng Banana Krezzz Cabang (×) &#13;&#13;Total Klaim : $belanja_rp &#13;&#13;Matur Suwun, &#13;Dipuntenggo karawuhan saklajengipun🙏🏻☺️")
             ->save();
 
         $messages = [$text];
