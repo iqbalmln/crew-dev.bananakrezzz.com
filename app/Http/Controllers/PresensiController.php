@@ -515,7 +515,7 @@ class PresensiController extends Controller
         
         $belanja_rp = presensi::where('card_id', $request->card_id)->where('status', 2)->where('status_approve', 1)->where('reward', 0)->sum('belanja');
         $belanja_rp = $this->rupiah($belanja_rp);
-        // presensi::where('card_id', $request->card_id)->where('status', 2)->where('reward', 0)->update(['reward' => true]);
+        presensi::where('card_id', $request->card_id)->where('status', 2)->where('status_approve', 1)->where('reward', 0)->update(['reward' => true]);
     
         $phone = card::where('id',$request->card_id)->first()->hp;
         $phone = $this->formatNomor($phone);
