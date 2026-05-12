@@ -529,7 +529,7 @@ class PresensiController extends Controller
         ]);
 
         $text = $client->to($phone)
-            ->content("Klaim absensi panjenengan sampun sukses! &#13;Wonten ing Kampoeng Banana Krezzz Cabang (×) &#13;&#13;Total Klaim : $belanja_rp &#13;&#13;Matur Suwun, &#13;Dipuntenggo karawuhan saklajengipun🙏🏻☺️")
+            ->content("Klaim absensi panjenengan sampun sukses! &#13;Wonten ing Kampoeng Banana Krezzz Cabang (×) &#13;&#13;Total Belanja : $belanja_rp &#13;&#13;Matur Suwun, &#13;Dipuntenggo karawuhan saklajengipun🙏🏻☺️")
             ->save();
 
         $messages = [$text];
